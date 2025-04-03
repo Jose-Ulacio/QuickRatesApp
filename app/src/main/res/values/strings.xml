@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">QuickRates</string>
+    <string name="Last_Update">"Ultima Actualizacion: %1$s %2$s"</string>
+    <string name="welcome_message">"¡Bienvenido de Vuelta!"</string>
+
+    //Mensajes de Error
+    <string name="error_timeout">Tiempo de espera agotado. Verifica tu conexión</string>
+    <string name="error_no_internet">No hay conexión a internet</string>
+    <string name="error_server">El servidor no Responde</string>
+    <string name="error_generic">Error al Obterner Datos: %s</string>
+    <string name="unknown_error">Error Desconocido</string>
+
+
+    //Dialogs
+    <string name="loading_rates">Cargando Tasas...</string>
+    <string name="error_title">Error</string>
+    <string name="retry_button">Reintentar</string>
+    <string name="close_button">Cerrar</string>
+</resources>

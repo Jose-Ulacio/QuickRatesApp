@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">QuickRates</string>
+    <string name="Last_Update">Last Update: %1$s %2$s</string>
+    <string name="welcome_message">¡Welcome Back!</string>
+
+    //Mensajes de Error
+    <string name="error_timeout">Timeout. Check your connection.</string>
+    <string name="error_no_internet">no internet connection</string>
+    <string name="error_server">The server is not responding</string>
+    <string name="error_generic">Error Getting Data: %s</string>
+    <string name="unknown_error">Unknown Error</string>
+
+
+    //Dialogs
+    <string name="loading_rates">Loading rates...</string>
+    <string name="error_title">Error</string>
+    <string name="retry_button">Retry</string>
+    <string name="close_button">Close</string>
+</resources>
