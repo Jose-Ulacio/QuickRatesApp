@@ -1,4 +1,4 @@
-package com.example.quickrates.view
+package com.example.quickrates.presentation.view
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -56,24 +56,20 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.quickrates.R
-import com.example.quickrates.ui.theme.PurpleDarkTrans
-import com.example.quickrates.ui.theme.QuickRatesTheme
-import com.example.quickrates.utils.NumberFormatter
-import com.example.quickrates.viewModel.RateChange
-import com.example.quickrates.viewModel.RatesViewModel
+import com.example.quickrates.presentation.ui.theme.PurpleDarkTrans
+import com.example.quickrates.presentation.ui.theme.QuickRatesTheme
+import com.example.quickrates.presentation.viewModel.RateChange
+import com.example.quickrates.presentation.viewModel.RatesViewModel
 
 class MainActivity : ComponentActivity() {
     private val viewModel: RatesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             QuickRatesTheme {
                 Box(modifier = Modifier.fillMaxWidth()){
