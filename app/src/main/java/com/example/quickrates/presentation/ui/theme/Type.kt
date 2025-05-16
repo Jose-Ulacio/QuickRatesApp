@@ -1,4 +1,4 @@
-package com.example.quickrates.ui.theme
+package com.example.quickrates.presentation.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

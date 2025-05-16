@@ -1,4 +1,4 @@
-package com.example.quickrates.ui.theme
+package com.example.quickrates.presentation.ui.theme
 
 import android.app.Activity
 import android.os.Build

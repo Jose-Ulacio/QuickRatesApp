@@ -1,4 +1,4 @@
-package com.example.quickrates.viewModel
+package com.example.quickrates.presentation.viewModel
 
 import android.app.Application
 import android.content.Context

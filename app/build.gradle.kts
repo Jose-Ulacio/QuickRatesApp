@@ -76,6 +76,11 @@ dependencies {
 
     //Livedata en Compose
     implementation("androidx.compose.runtime:runtime-livedata:1.7.8")
+    
+    //Notifications
+    implementation ("androidx.work:work-runtime-ktx:2.10.1")
+    implementation ("androidx.core:core-ktx:1.8.0")
+    implementation ("androidx.startup:startup-runtime:1.2.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
