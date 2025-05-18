@@ -1,5 +1,6 @@
 package com.example.quickrates.presentation.view
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -58,17 +59,45 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
+import com.example.quickrates.App
 import com.example.quickrates.R
 import com.example.quickrates.presentation.ui.theme.PurpleDarkTrans
 import com.example.quickrates.presentation.ui.theme.QuickRatesTheme
 import com.example.quickrates.presentation.viewModel.RateChange
 import com.example.quickrates.presentation.viewModel.RatesViewModel
+import com.example.quickrates.utils.notifications.NotificationUtils
+import com.example.quickrates.utils.worker.QuickRatesWorker
 
 class MainActivity : ComponentActivity() {
     private val viewModel: RatesViewModel by viewModels()
 
+    lateinit var workManager: WorkManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Solicitar permiso para notificaciones (Android 13+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissions(arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 0)
+        }
+
+        workManager = WorkManager.getInstance(App.instance)
+
+        val workRequest = OneTimeWorkRequestBuilder<QuickRatesWorker>()
+            .setConstraints(
+                Constraints(
+                    requiredNetworkType = NetworkType.CONNECTED
+                )
+            )
+            .addTag(NotificationUtils.NOTIFICATION_ID)
+            .build()
+
+        workManager.enqueue(workRequest)
 
         setContent {
             QuickRatesTheme {
