@@ -59,19 +59,18 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import androidx.work.WorkRequest
 import com.example.quickrates.App
 import com.example.quickrates.R
 import com.example.quickrates.presentation.ui.theme.PurpleDarkTrans
 import com.example.quickrates.presentation.ui.theme.QuickRatesTheme
 import com.example.quickrates.presentation.viewModel.RateChange
 import com.example.quickrates.presentation.viewModel.RatesViewModel
-import com.example.quickrates.utils.notifications.NotificationUtils
+import com.example.quickrates.utils.timeUtils.TimeUtils
 import com.example.quickrates.utils.worker.QuickRatesWorker
+import java.util.concurrent.TimeUnit
 
 class MainActivity : ComponentActivity() {
     private val viewModel: RatesViewModel by viewModels()
@@ -88,16 +87,8 @@ class MainActivity : ComponentActivity() {
 
         workManager = WorkManager.getInstance(App.instance)
 
-        val workRequest = OneTimeWorkRequestBuilder<QuickRatesWorker>()
-            .setConstraints(
-                Constraints(
-                    requiredNetworkType = NetworkType.CONNECTED
-                )
-            )
-            .addTag(NotificationUtils.NOTIFICATION_ID)
-            .build()
-
-        workManager.enqueue(workRequest)
+        setupWorker("QuickRatesWorkerBCV", 17, 0, workManager)
+        setupWorker("QuickRatesWorkerMonitor", 12, 30, workManager)
 
         setContent {
             QuickRatesTheme {
@@ -114,6 +105,20 @@ class MainActivity : ComponentActivity() {
                         onRetry = {viewModel.refreshRates()}
                     )
                 }
+            }
+        }
+    }
+
+    fun setupWorker(uniqueWorkName: String, hour: Int, minute: Int, workManager: WorkManager){
+        workManager.getWorkInfosForUniqueWorkLiveData(uniqueWorkName).observeForever{ workInfo ->
+            if ((workInfo == null) or (workInfo.isEmpty())){
+                val initialDelay = TimeUtils.calculateInitialDelay(hour, minute)
+
+                val dailyWorkRequest = PeriodicWorkRequestBuilder<QuickRatesWorker>(24, TimeUnit.HOURS)
+                    .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+                    .build()
+
+                workManager.enqueueUniquePeriodicWork(uniqueWorkName, ExistingPeriodicWorkPolicy.KEEP, dailyWorkRequest)
             }
         }
     }

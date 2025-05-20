@@ -10,22 +10,24 @@ import com.example.quickrates.data.model.EuroResponse
 import com.example.quickrates.data.remote.api.KtorClient
 import com.example.quickrates.utils.notifications.NotificationProvider
 import com.example.quickrates.utils.notifications.NotificationUtils
+import com.example.quickrates.utils.timeUtils.TimeUtils
+import java.util.UUID
 
 class QuickRatesWorker(appContext: Context, params: WorkerParameters): CoroutineWorker(appContext, params) {
 
     override suspend fun doWork(): Result {
         try {
-            val isBCV = true //TimeUtils.validateHour(5, 0)
-            val isParalelo = false//TimeUtils.validateHour(12, 30)
+            val isBCV = TimeUtils.validateHour(17, 0)
+            val isParalelo = TimeUtils.validateHour(12, 30)
 
             if (isBCV || isParalelo){
                 val dollarResponse = getDollar()
                 val euroResponse = getEuro()
 
                 val message = if (isBCV){
-                    "Dollar: ${dollarResponse.monitorDollars.BCV.price} Bs\nEuro: ${euroResponse.monitorEuros.BCV.price} Bs"
+                    "Dólar: ${dollarResponse.monitorDollars.BCV.price} Bs\nEuro: ${euroResponse.monitorEuros.BCV.price} Bs"
                 } else {
-                    "Dollar: ${dollarResponse.monitorDollars.enParalelo.price} Bs\nEuro: ${euroResponse.monitorEuros.enParalelo.price} Bs"
+                    "Dólar: ${dollarResponse.monitorDollars.enParalelo.price} Bs\nEuro: ${euroResponse.monitorEuros.enParalelo.price} Bs"
                 }
 
                 showNotification(message, isBCV)
@@ -50,14 +52,15 @@ class QuickRatesWorker(appContext: Context, params: WorkerParameters): Coroutine
         return KtorClient.getEuroRates()
     }
 
+    val notificationManager = App.getNotificationManager()
+
     fun showNotification(message: String, isBCV: Boolean){
         val title = if (isBCV){
-            "Actualizacion de Tasas BCV"
+            "Actualización de Tasas BCV"
         } else {
-            "Actualizacion de Tasas Monitor"
+            "Actualización de Tasas Monitor"
         }
 
-        val notificationManager = App.getNotificationManager()
         val notification = NotificationProvider().notificationBuilder(message, title).build()
         notificationManager.notify(NotificationUtils.NOTIFICATION_ID_NUMBER, notification)
     }
