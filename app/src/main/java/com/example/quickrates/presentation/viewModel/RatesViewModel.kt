@@ -11,10 +11,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.quickrates.App
 import com.example.quickrates.R
 import com.example.quickrates.data.model.DollarResponse
 import com.example.quickrates.data.model.EuroResponse
 import com.example.quickrates.data.remote.api.KtorClient
+import com.example.quickrates.utils.notifications.NotificationProvider
+import com.example.quickrates.utils.notifications.NotificationUtils
 import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.network.sockets.SocketTimeoutException
 import kotlinx.coroutines.launch
